@@ -1,0 +1,41 @@
+{{ define "main" }}
+
+<h1>About</h1>
+
+<p>
+Follow our renovation of the Smoke House, being (re)built with ❤ in Three Forks, MT. <a href="about/">(more)</a>
+<br>- Smith & Tori
+</p>
+<br/>
+
+<h1>Latest posts</h1>
+
+<div class="posts-list">
+{{ with .Site.GetPage "/posts" }}
+    {{ range first 3 (sort .Data.Pages "Date" "desc" (where .Pages ".Params.private" "!=" true))}}
+        <div class="post">
+            <p>
+                <div class="date">{{ .PublishDate.Format "Jan. 2, 2006" }}</div>
+                <h1><a href="{{ .Permalink }}" title="{{ .Title }}">{{ .Title }}</a></h1>
+                {{ .Summary }}
+            </p>
+        </div>    
+    {{ end }}
+{{ end }}
+</div>
+
+<h1>Latest photos</h1>
+
+<div class="image-grid">
+{{ range first 3 (sort (resources.ByType "image") ".Name" "asc") }}
+    <a href="{{ .Permalink }}" title="{{ .Title }}">
+    {{ $image := resources.Get .RelPermalink }}
+    {{ with $image }}
+        {{ $thumb := .Resize "400x" }}
+        <img src="{{ $thumb.RelPermalink }}" alt="{{ .Title }}" class="img-responsive">
+    {{end}}
+    </a>
+{{ end }}
+</div>
+
+{{ end }}
